@@ -284,7 +284,7 @@ function initializePage() {
         }
     });
 
-    $('img.optional-item').contextmenu(function() {
+    $('img.optional-item').unbind("contextmenu").contextmenu(function() {
         $(this).siblings(".item-turnin").toggle();
     });
 
@@ -412,6 +412,15 @@ function initializePage() {
 
     $('.keys-tracker img').on('mouseleave', function() {
         $('.keys-tracker h2').text("");
+    });
+
+    // letter block names
+    $('.letter-tracker img').on('mouseenter', function() {
+        $('.letter-tracker h2').text($(this).attr('id'));
+    });
+
+    $('.letter-tracker img').on('mouseleave', function() {
+        $('.letter-tracker h2').text("");
     });
 
     // koopa koot block names
@@ -586,7 +595,7 @@ $(document).ready(function(){
                         $("#blue-house-open").click();
                     }
                     
-                    if (data["ShortenBowsersCastle"] != $("#fast-bowser-castle").is(':checked')) {
+                    if ((data["BowsersCastleMode"] >= 1) != $("#fast-bowser-castle").is(':checked')) {
                         $("#fast-bowser-castle").click();
                     }
 
@@ -606,8 +615,20 @@ $(document).ready(function(){
                         $("#coins-randomized").click();
                     }
 
-                    // TODO: koopa koot is not randomized yet, add it here when it is
-                    if ($("#koopa-koot-randomized").is(':checked')) {
+                    // letter settings:
+                    // 0 = none
+                    // 1 = no letter chain
+                    // 2 = final chain reward
+                    // 3 = all letters
+                    if ((data["IncludeLettersMode"] >= 1) != $("#letters-randomized").is(':checked')) {
+                        $("#letters-randomized").click(); // disable letters if enabled
+                    }
+
+                    // koopa koot settings:
+                    // 0 = none
+                    // 1 = koot rewards
+                    // 2 = koot rewards and items
+                    if ((data["IncludeFavorsMode"] >= 1) != $("#koopa-koot-randomized").is(':checked')) {
                         $("#koopa-koot-randomized").click(); // disable koopa koot if enabled
                     }
 
@@ -962,6 +983,15 @@ $(document).ready(function(){
         countChecks();
     });
 
+    $("#letters-randomized").click(function() {
+        var isChecked = $(this).is(':checked');
+        localStorage.setItem("letters-randomized", isChecked);
+        toggleChecks("[Letter]", !isChecked);
+        $("#flag-letters").toggle(isChecked);
+        countChecks();
+        $("div.letter-tracker").toggle(isChecked);
+    });
+
     var shops_randomized = localStorageGetWithDefault("shops-randomized", "true") == "true";
     if (!shops_randomized) {
         $("#shops-randomized").click();
@@ -980,6 +1010,11 @@ $(document).ready(function(){
     var coins_randomized = localStorageGetWithDefault("coins-randomized", "true") == "true";
     if (!coins_randomized) {
         $("#coins-randomized").click();
+    }
+
+    var letters_randomized = localStorageGetWithDefault("letters-randomized", "true") == "true";
+    if (!letters_randomized) {
+        $("#letters-randomized").click();
     }
 
     ////////////////////////////////////////////////////////////////

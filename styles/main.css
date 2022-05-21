@@ -48,7 +48,7 @@ td {
 p, h1, h2, h3 {
     margin: 0 0 0 0;
     font-size: 1.5em;
-    font-weight: bolder;
+    font-weight: normal;
     color: white;
 
     -webkit-text-stroke: 1px black;
@@ -112,6 +112,11 @@ td {
 .keys-tracker {
     width: 36em;
     height: 9em;
+}
+
+.letter-tracker {
+    width: 36em;
+    height: 21em;
 }
 
 .koopa-koot-tracker {
